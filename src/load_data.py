@@ -30,6 +30,6 @@ df = pd.read_csv(csv_file)
 
 data = df.to_dict(orient="records")
 
-# Bulk index with helpers (simple way)
+# Bulk index with helpers
 success, failed = helpers.bulk(es, data, index=INDEX_NAME, raise_on_error=False)
 print(f"Successfully indexed {success} documents.")
