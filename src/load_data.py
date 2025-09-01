@@ -17,7 +17,7 @@ class ElasticDataLoader:
             self.es.indices.create(index=self.index_name, body=self.mapping)
             print(f"Index '{self.index_name}' recreated.")
     
-    def load_csv(self, csv_file: str) -> list:
+    def load_csv(self, csv_file: str):
         df = pd.read_csv(csv_file)
         df['Antisemitic'] = df['Antisemitic'].astype(bool)
         return df.to_dict(orient="records")
