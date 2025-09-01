@@ -6,7 +6,6 @@ class SentimentProcessor:
     def __init__(self, es_client: Elasticsearch, index_name: str):
         self.es = es_client
         self.index_name = index_name
-        # Initialize sentiment analyzer
         nltk_dir = "/tmp/nltk_data"
         import os
         os.makedirs(nltk_dir, exist_ok=True)
@@ -15,10 +14,8 @@ class SentimentProcessor:
         self.sia = SentimentIntensityAnalyzer()
     
     def add_sentiment(self):
-        """Add sentiment field to all documents in the index using Elasticsearch."""
-        # Get all documents
         query = {"query": {"match_all": {}}}
-        response = self.es.search(index=self.index_name, body=query, size=10000)  # Adjust size if needed
+        response = self.es.search(index=self.index_name, body=query, size=10000)
         docs = response['hits']['hits']
         
         for doc in docs:
