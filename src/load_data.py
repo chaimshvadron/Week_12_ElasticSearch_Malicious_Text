@@ -1,13 +1,10 @@
 from elasticsearch import Elasticsearch, helpers
 import pandas as pd
 
-# Create connection to locally running Elasticsearch
 es = Elasticsearch("http://localhost:9200")
 
-# Index name
 INDEX_NAME = "tweets"
 
-# Define mapping for the index
 mapping = {
     "mappings": {
         "properties": {
@@ -21,7 +18,6 @@ mapping = {
     }
 }
 
-# Create index if it doesn't exist
 if not es.indices.exists(index=INDEX_NAME):
     es.indices.create(index=INDEX_NAME, body=mapping)
     print(f"Index '{INDEX_NAME}' created successfully.")
