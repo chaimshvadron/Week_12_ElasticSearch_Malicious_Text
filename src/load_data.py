@@ -19,6 +19,7 @@ class ElasticDataLoader:
     
     def load_csv(self, csv_file: str) -> list:
         df = pd.read_csv(csv_file)
+        df['Antisemitic'] = df['Antisemitic'].astype(bool)
         return df.to_dict(orient="records")
     
     def bulk_index(self, data: list):
@@ -40,7 +41,7 @@ if __name__ == "__main__":
             "properties": {
                 "TweetID": {"type": "keyword"},
                 "CreateDate": {"type": "date", "format": "yyyy-MM-dd HH:mm:ssXXX||EEE MMM dd HH:mm:ss Z yyyy"},
-                "Antisemitic": {"type": "integer"},
+                "Antisemitic": {"type": "boolean"},
                 "text": {"type": "text"},
                 "sentiment": {"type": "keyword"}, 
                 "weapons": {"type": "keyword"}  
