@@ -29,8 +29,8 @@ def get_antisemitic_with_weapons():
         results = query_service.get_antisemitic_with_weapons()
         documents = [doc["_source"] for doc in results]
         return {"documents": documents}
-    except Exception:
-        return {"message": "Data not ready or not available"}
+    except Exception as e:
+        return {"message": f"Data not ready or not available: {str(e)}"}
 
 @app.get("/documents-with-multiple-weapons")
 def get_documents_with_multiple_weapons():

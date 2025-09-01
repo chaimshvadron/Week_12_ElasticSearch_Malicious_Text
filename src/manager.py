@@ -27,12 +27,14 @@ class ElasticManager:
         loader.create_index()
         data = loader.load_csv(csv_file)
         loader.bulk_index(data)
-        
+
         processor = SentimentProcessor(self.es, self.index_name)
         with open(weapons_file, 'r', encoding='utf-8') as f:
             weapons_list = [line.strip() for line in f if line.strip()]
-        processor.process_all_documents(weapons_list)
-        
+    
+        processor.process_all(weapons_list)
+        print("Analysis completed successfully")
+
         deleter = UnwantedDeleter(self.es, self.index_name)
         deleter.delete_unwanted()
         

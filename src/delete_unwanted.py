@@ -11,11 +11,15 @@ class UnwantedDeleter:
                 "bool": {
                     "must": [
                         {"term": {"Antisemitic": False}},
-                        {"terms": {"sentiment": ["neutral", "positive"]}},
+                        {"terms": {"sentiment": ["neutral", "positive"]}}
+                    ],
+                    "filter": [
                         {
                             "script": {
-                                "source": "doc['weapons'].size() == 0",
-                                "lang": "painless"
+                                "script": {
+                                    "source": "doc['weapons'].length == 0",
+                                    "lang": "painless"
+                                }
                             }
                         }
                     ]

@@ -10,11 +10,17 @@ class QueryService:
             "query": {
                 "bool": {
                     "must": [
-                        {"term": {"Antisemitic": True}},
-                        {"script": {
-                            "source": "doc['weapons'].size() > 0",
-                            "lang": "painless"
-                        }}
+                        {"term": {"Antisemitic": True}}
+                    ],
+                    "filter": [
+                        {
+                            "script": {
+                                "script": {
+                                    "source": "doc['weapons'].length > 0",
+                                    "lang": "painless"
+                                }
+                            }
+                        }
                     ]
                 }
             }
@@ -27,11 +33,15 @@ class QueryService:
         query = {
             "query": {
                 "bool": {
-                    "must": [
-                        {"script": {
-                            "source": f"doc['weapons'].size() >= {min_weapons}",
-                            "lang": "painless"
-                        }}
+                    "filter": [
+                        {
+                            "script": {
+                                "script": {
+                                    "source": f"doc['weapons'].length >= {min_weapons}",
+                                    "lang": "painless"
+                                }
+                            }
+                        }
                     ]
                 }
             }

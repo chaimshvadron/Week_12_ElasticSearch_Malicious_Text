@@ -1,4 +1,4 @@
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, helpers
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import os
@@ -14,10 +14,12 @@ class SentimentProcessor:
         self.sia = SentimentIntensityAnalyzer()
     
     def process_all(self, weapon_list: list):
+        
         query = {"query": {"match_all": {}}}
         response = self.es.search(index=self.index_name, body=query, size=10000)
         docs = response['hits']['hits']
-        
+
+        actions = []
         for doc in docs:
             text = doc['_source']['text']
             text_lower = text.lower()
@@ -32,10 +34,16 @@ class SentimentProcessor:
             
             found_weapons = [weapon for weapon in weapon_list if weapon.lower() in text_lower]
             
-            self.es.update(index=self.index_name, id=doc['_id'], body={
-                "doc": {
-                    "sentiment": sentiment,
-                    "weapons": found_weapons
+            actions.append({
+                '_op_type': 'update',
+                '_index': self.index_name,
+                '_id': doc['_id'],
+                'doc': {
+                    'sentiment': sentiment,
+                    'weapons': found_weapons
                 }
             })
-        
+
+        if actions:
+            helpers.bulk(self.es, actions)
+
