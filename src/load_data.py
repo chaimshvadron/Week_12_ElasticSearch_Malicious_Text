@@ -22,6 +22,8 @@ if not es.indices.exists(index=INDEX_NAME):
     es.indices.create(index=INDEX_NAME, body=mapping)
     print(f"Index '{INDEX_NAME}' created successfully.")
 else:
+    es.indices.delete(index=INDEX_NAME)
+    es.indices.create(index=INDEX_NAME, body=mapping)
     print(f"Index '{INDEX_NAME}' already exists.")
 
 # Load CSV data
