@@ -6,7 +6,6 @@ class UnwantedDeleter:
         self.index_name = index_name
     
     def delete_unwanted(self):
-        """Delete documents that are not antisemitic, have no weapons, and sentiment is neutral or positive."""
         query = {
             "query": {
                 "bool": {
