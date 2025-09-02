@@ -6,6 +6,7 @@ class QueryService:
         self.index_name = index_name
     
     def get_antisemitic_with_weapons(self):
+        self.es.indices.refresh(index=self.index_name)
         query = {
             "query": {
                 "bool": {
@@ -30,6 +31,7 @@ class QueryService:
         return response["hits"]["hits"]
     
     def get_documents_with_multiple_weapons(self, min_weapons=2):
+        self.es.indices.refresh(index=self.index_name)
         query = {
             "query": {
                 "bool": {

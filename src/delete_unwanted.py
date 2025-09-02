@@ -6,6 +6,7 @@ class UnwantedDeleter:
         self.index_name = index_name
     
     def delete_unwanted(self):
+        self.es.indices.refresh(index=self.index_name)
         query = {
             "query": {
                 "bool": {

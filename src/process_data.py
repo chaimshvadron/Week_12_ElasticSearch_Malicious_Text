@@ -14,10 +14,15 @@ class SentimentProcessor:
         self.sia = SentimentIntensityAnalyzer()
     
     def process_all(self, weapon_list: list):
-        
+        self.es.indices.refresh(index=self.index_name)
+        print("Starting document processing...")
+
         query = {"query": {"match_all": {}}}
         response = self.es.search(index=self.index_name, body=query, size=10000)
         docs = response['hits']['hits']
+        
+        
+        
 
         actions = []
         for doc in docs:
@@ -33,7 +38,6 @@ class SentimentProcessor:
                 sentiment = "neutral"
             
             found_weapons = [weapon for weapon in weapon_list if weapon.lower() in text_lower]
-            
             actions.append({
                 '_op_type': 'update',
                 '_index': self.index_name,
@@ -45,5 +49,7 @@ class SentimentProcessor:
             })
 
         if actions:
+            print(f"Processing {len(actions)} documents for sentiment and weapons.")
             helpers.bulk(self.es, actions)
+            print("Index refreshed after updates")
 
