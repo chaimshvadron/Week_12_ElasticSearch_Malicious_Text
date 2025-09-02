@@ -30,29 +30,3 @@ class ElasticDataLoader:
             for fail in failed[:5]: 
                 print(f"Error: {fail}")
         return success, failed
-
-# Usage
-if __name__ == "__main__":
-    es = Elasticsearch("http://localhost:9200")
-    
-    INDEX_NAME = "tweets"
-    mapping = {
-        "mappings": {
-            "properties": {
-                "TweetID": {"type": "keyword"},
-                "CreateDate": {"type": "date", "format": "yyyy-MM-dd HH:mm:ssXXX||EEE MMM dd HH:mm:ss Z yyyy"},
-                "Antisemitic": {"type": "boolean"},
-                "text": {"type": "text"},
-                "sentiment": {"type": "keyword"}, 
-                "weapons": {"type": "keyword"}  
-            }
-        }
-    }
-    
-    loader = ElasticDataLoader(es, INDEX_NAME, mapping)
-    loader.create_index()
-    
-    csv_file = "data/tweets_injected 3.csv"
-    data = loader.load_csv(csv_file)
-    
-    loader.bulk_index(data)

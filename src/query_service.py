@@ -50,18 +50,3 @@ class QueryService:
         response = self.es.search(index=self.index_name, body=query, size=100)
         return response["hits"]["hits"]
 
-
-# Example usage
-if __name__ == "__main__":
-    es = Elasticsearch("http://localhost:9200")
-    index_name = "tweets"
-    
-    query_service = QueryService(es, index_name)
-    
-    # Example: Get antisemitic documents with weapons
-    antisemitic_docs = query_service.get_antisemitic_with_weapons()
-    print(f"Found {len(antisemitic_docs)} antisemitic documents with weapons")
-    
-    # Example: Get documents with multiple weapons
-    multi_weapon_docs = query_service.get_documents_with_multiple_weapons(min_weapons=2)
-    print(f"Found {len(multi_weapon_docs)} documents with 2+ weapons")
